@@ -4,7 +4,7 @@ require 'dotenv'
 
 Dotenv.load
 
-def get_data
+def get_stars
   url = "https://api.github.com/users/#{ENV['PINBOARD_USERNAME']}/starred"
   response = HTTParty.get(url)
   response.parsed_response
@@ -19,10 +19,11 @@ def send_link(url, description)
 end
 
 def main
-  get_data.each do |star|
-    url = star['html_url']
-    description = "#{star['full_name']}: #{star['description']}"
-    send_link(url, description)
+  get_stars.each do |star|
+    send_link(
+      star['html_url'],
+      "#{star['full_name']}: #{star['description']}"
+    )
   end
 end
 
